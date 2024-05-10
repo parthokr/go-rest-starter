@@ -62,3 +62,27 @@ func RequestLoggerMiddleware(next http.Handler) http.HandlerFunc {
 }
 ...
 ```
+
+### Subrouters
+```go
+package main
+
+import (
+	"fmt"
+	"go-rest-starter/server"
+	"net/http"
+)
+
+func main() {
+	apiServer := server.NewServer(":8080")
+	router := server.NewRouter()
+	router.Get("/ping", []server.Middleware{}, func(w http.ResponseWriter, r *http.Request) error {
+        fmt.Fprint(w, "pong")
+        return nil
+	})
+	apiServer.Mount("/v1", router)
+	apiServer.Run()
+}
+```
+You should be able to access the route at `http://localhost:8080/v1/ping`
+
